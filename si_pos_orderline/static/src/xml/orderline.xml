@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" inherit_id="point_of_sale_template" xml:space="preserve">
+    <t t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('product-name')]" position="before">
+        <span style="font-weight: bold;" class="product-image-icon sh_orderline_stock_icon">
+        <t t-esc="props.line.custom_sequence_number"/>
+        </span>
+        </xpath>
+    </t>
+</templates>
