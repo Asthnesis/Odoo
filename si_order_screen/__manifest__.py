@@ -13,6 +13,8 @@
                 'si_order_screen/static/src/js/order_screen.js',
                 'si_order_screen/static/src/xml/order_screen.xml',
                 'si_order_screen/static/src/xml/order_screen_receipt.xml',
+                'si_order_screen/static/src/js/actionpad_widget.js',
+
             ]
     },
 
