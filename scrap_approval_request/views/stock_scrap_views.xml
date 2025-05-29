@@ -1,0 +1,92 @@
+<odoo>
+        <record id="view_stock_scrap_form_inherit_approval" model="ir.ui.view">
+        <field name="name">stock.scrap.form.inherit.approval</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state' and @widget='statusbar']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,awaiting,awaiting_finance,done"/>
+            </xpath>
+            
+            <xpath expr="//header/button[@name='action_validate']" position="replace">
+                <button name="action_validate"
+                        type="object"
+                        string="Finance Approve"
+                        invisible = "state!= 'awaiting_finance'"
+                        groups="scrap_approval_request.group_scrap_finance_approver"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_validate']" position="after">
+                <button name="action_request" 
+                    type="object" string="Request Approval"
+                    invisible = "state != 'draft'"/>
+                <button name="action_hod_approve" type="object" string="HOD Approve"
+                    invisible = "state != 'awaiting'"
+                    groups="scrap_approval_request.group_scrap_hod_approver"/>
+                <button name="action_draft" type="object" string="Reset to Draft"
+                    invisible = "state != 'rejected'"
+                    groups="scrap_approval_request.group_scrap_hod_approver"/>
+                <button name="action_reject" type="object" string="Reject"
+                    invisible="state not in ['awaiting', 'awaiting_finance']"
+                    groups="scrap_approval_request.group_scrap_hod_approver,scrap_approval_request.group_scrap_finance_approver"/>
+
+            </xpath>
+
+
+            <xpath expr="//field[@name='scrap_qty']" position="after">
+                <label for ="reason" string="Reason for Scrap      " class="oe_edit_only"/>
+                <field name="reason" required="1"/>
+            </xpath>
+        
+        </field>
+    </record>
+
+    <record id="stock_scrap_form_view2_inherit" model="ir.ui.view">
+    <field name="name">stock.scrap.form.inherit</field>
+    <field name="model">stock.scrap</field>
+    <field name="inherit_id" ref="stock.stock_scrap_form_view2"/>
+    <field name="arch" type="xml">
+        <xpath expr="//footer/button[@name='action_validate']" position="attributes">
+            <attribute name="string">Request Approval</attribute>
+        </xpath>
+        <xpath expr="//field[@name='scrap_qty']" position="after">
+                <label for ="reason" string="Reason for Scrap      " class="oe_edit_only"/>
+                <field name="reason" required="1"/>
+        </xpath>
+    </field>
+    </record>
+    <record id="action_mass_approve_scraps" model="ir.actions.server">
+        <field name="name">HOD Approve Selected Scraps</field>
+        <field name="model_id" ref="stock.model_stock_scrap"/>
+        <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="groups_id" eval="[(4, ref('scrap_approval_request.group_scrap_hod_approver'))]"/>
+        <field name="code">
+            action = records.action_hod_approve()
+        </field>
+    </record>
+    <record id="action_mass_finance_approve_scraps" model="ir.actions.server">
+        <field name="name">Finance Approve Selected Scraps</field>
+        <field name="model_id" ref="stock.model_stock_scrap"/>
+        <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="groups_id" eval="[(4, ref('scrap_approval_request.group_scrap_finance_approver'))]"/>
+        <field name="code">
+            action = records.action_finance_approve()
+        </field>
+    </record>
+    <record id="action_mass_reject_scraps" model="ir.actions.server">
+        <field name="name">Reject Selected Scraps</field>
+        <field name="model_id" ref="stock.model_stock_scrap"/>
+        <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="groups_id" eval="[(4, ref('scrap_approval_request.group_scrap_hod_approver')), (4, ref('scrap_approval_request.group_scrap_finance_approver'))]"/>
+        <field name="code">
+            action = records.action_reject()
+        </field>
+    </record>
+
+</odoo>
