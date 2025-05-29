@@ -1,0 +1,64 @@
+<odoo>
+    <record id="view_mrp_bom_form_inherit_state" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit.state</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">1</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <header>
+                   <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved"/>
+                <button name="button_pending" class="oe_highlight" states="draft" string="Submit for approval" type="object" help="Move to Pending state for Approval"/>
+
+            <button name="action_approve" type="object" string="Approve"
+                attrs="{'invisible': [('state', '!=', 'pending')]}"
+                groups="bom_approval_request.group_bom_approver"/>
+            <button name="action_reject" type="object" string="Reject"
+                attrs="{'invisible': [('state', '!=', 'pending')]}"
+                groups="bom_approval_request.group_bom_approver"/>
+            <button name="action_draft" type="object" string="Set to Draft"
+                attrs="{'invisible': ['&amp;', ('state', '!=', 'rejected'), ('state', '!=', 'approved')]}"
+                groups="bom_approval_request.group_bom_approver"/>
+
+            </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_bom_tree_view_inherit_state" model="ir.ui.view">
+        <field name="name">mrp.bom.tree.inherit.state</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="state"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="action_mass_approve_boms" model="ir.actions.server">
+        <field name="name">Approve Selected BOMs</field>
+        <field name="model_id" ref="mrp.model_mrp_bom"/>
+        <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="groups_id" eval="[(4, ref('bom_approval_request.group_bom_approver'))]"/>
+        <field name="code">
+            action = records.action_approve()
+        </field>
+    </record>
+    <record id="action_mass_reject_boms" model="ir.actions.server">
+        <field name="name">Reject Selected BOMs</field>
+        <field name="model_id" ref="mrp.model_mrp_bom"/>
+        <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="groups_id" eval="[(4, ref('bom_approval_request.group_bom_approver'))]"/>
+        <field name="code">
+            action = records.action_reject()
+        </field>
+    </record>
+</odoo>

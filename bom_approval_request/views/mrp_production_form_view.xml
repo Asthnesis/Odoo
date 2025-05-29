@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_mrp_production_form_inherit_bom_state" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit.bom.state</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='bom_id']" position="attributes">
+            <attribute name="domain">[('state', '=', 'approved'), '|', ('company_id', '=', False), ('company_id', '=', company_id)]</attribute>
+            <attribute name="attrs">{'readonly': [('state', '!=', 'draft')]}</attribute>
+        </xpath>
+        <xpath expr="//field[@name='product_id']" position="attributes">
+            <attribute name="domain">[('bom_ids.state', '=', 'approved')]</attribute>
+        </xpath>
+        </field>
+    </record>
+</odoo>
