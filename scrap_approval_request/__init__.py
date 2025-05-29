@@ -12,3 +12,10 @@ def update_existing_scraps(cr, registry):
             'has_approval_request': True,
             'requested_by': SUPERUSER_ID,
         })
+def uninstall_hook(cr,registry):
+    env = api.Environment(cr, SUPERUSER_ID, {})
+    scraps = env['stock.scrap'].search([('state', 'in', ['awaiting', 'awaiting_finance'])])
+    scraps.write({
+        'state': 'draft',
+        'requested_by': env.uid,
+    })
