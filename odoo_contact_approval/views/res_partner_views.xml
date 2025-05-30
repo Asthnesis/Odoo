@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_view_form" model="ir.ui.view" >
+        <field name="name">res.partner.view.form.inherit.approval</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//form/div[1]" position="after">
+                <header>
+                <button name="action_approve" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'draft')]}" string="Submit for Approval" type="object" help="Submit for Contact approval"/>
+                <button name="action_approve_contact" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'awaiting')]}" string="Approve" type="object" help="Approve Contact" groups="odoo_contact_approval.group_contacts_approval"/>
+                <button name="action_reject_contact" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'awaiting')]}" string="Reject" type="object" help="Reject Contract" groups="odoo_contact_approval.group_contacts_approval"/>
+                <button name="action_reset_contact" class="oe_highlight" attrs="{'invisible': [('status', 'not in', ['approve', 'reject'])]}" string="Reset to Draft" type="object" help="Reset Contract" groups="odoo_contact_approval.group_contacts_approval"/>
+                <field name="status" widget="statusbar"/>
+                </header>
+            </xpath>
+            <xpath expr="//div[hasclass('o_address_format')]" position="after">
+                <field name="approver_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_contacts_manager_approval" model="ir.actions.server" >
+        <field name="name">Approve</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_approve_contact()
+        </field>
+    </record>
+
+    <record id="action_contacts_manager_reject" model="ir.actions.server" >
+        <field name="name">Reject</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_reject_contact()
+        </field>
+    </record>
+
+    <record id="res_partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.view.search.inherit.approval</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='type_company']" position="after">
+                <filter name="type_state" string="State"
+                        context="{'group_by': 'status'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
