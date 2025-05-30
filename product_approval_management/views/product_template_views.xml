@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!-- Confirm ,Reset button and state field in the product form page-->
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.view.form.inherit.product.approval.management</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="action_request" type="object"
+                        invisible="approve_state != 'draft'"
+                        class="oe_highlight"
+                        string="Request Approval"/>
+
+                <button name="action_confirm_product_approval" type="object"
+                        invisible="approve_state != 'awaiting'"
+                        string="Approve"
+                        class="oe_highlight"
+                        groups="product_approval_management.product_approval_management_group_manager"/>
+
+                <button name="action_reject_product" type="object"
+                        invisible="approve_state != 'awaiting'"
+                        string="Reject"
+                        class="oe_highlight"
+                        help="Reject Product Approval"
+                        groups="product_approval_management.product_approval_management_group_manager"/>
+
+                <button name="action_reset_product_approval" type="object"
+                        invisible="approve_state not in ['approve','reject']"
+                        string="Reset To Draft"
+                        groups="product_approval_management.product_approval_management_group_manager"/>
+
+                <field name="approve_state" widget="statusbar"
+                       statusbar_visible="draft,awaiting,approve"/>
+            </header>
+        </field>
+    </record>
+<!--    Search and group by option in the product-->
+    <record id="product_template_search_view" model="ir.ui.view">
+        <field name="name">product.template.view.search.inherit.product.approval.management</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+              <xpath expr="//search/group/filter[@name='type']" position="after">
+                <filter string="Status" name="approve_state" context="{'group_by':'approve_state'}"/>
+            </xpath>
+              <xpath expr="//search/filter[@name='consumable']" position="after">
+                <filter string="Status" name="approve_state"  domain="[('approve_state', 'in', ['draft', 'approve'])]"/>
+            </xpath>
+        </field>
+    </record>
+<!--    Bulk product confirm by client action-->
+    <record id="action_product_approval_management" model="ir.actions.server">
+        <field name="name">Approve Selected Products</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.action_confirm_products()</field>
+        <field name="binding_view_types">list,form</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="groups_id" eval="[(4, ref('product_approval_management.product_approval_management_group_manager'))]"/>
+    </record>
+<!--    Bulk product reject by client action-->
+    <record id="action_product_rejection_management" model="ir.actions.server">
+        <field name="name">Reject Selected Products</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.action_reject_product()</field>
+        <field name="binding_view_types">list,form</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="groups_id" eval="[(4, ref('product_approval_management.product_approval_management_group_manager'))]"/>
+    </record>
+
+    <record id="product_template_tree_view_inherit_state" model="ir.ui.view">
+    <field name="name">product.template.product.tree</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_tree_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//tree" position="inside">
+            <field name="approve_state" string="Status"/>
+        </xpath>
+    </field>
+    </record>
+
+</odoo>
