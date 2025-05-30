@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_tax">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+                <div class="page">
+                  <div style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;">
+                   
+                     <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                    <tbody>
+                        <colgroup>
+                                <col width="40%"/>
+                                <col width="20%"/>
+                                <col width="40%"/>
+                        </colgroup>
+                        <tr>
+                        
+                        <td style="text-align:left">
+                            <strong><t t-esc="res_company.name"/><br/></strong> 
+                            <t t-esc="res_company.street"/><br/>
+                            <t t-esc="res_company.street2"/>, <t t-esc="res_company.city"/><br/>
+                            <t t-esc="res_company.phone"/><br/>  
+                            <t t-esc="res_company.email"/><br/>
+                            <t t-esc="res_company.website"/><br/></td>
+                    
+                    <td/>
+                    
+                    <td><img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/></td></tr>
+                    </tbody>
+                </table>
+                 <br/>
+                 <center><h1 style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace; color:#1f5999;">
+                               <span>Tax Report</span>
+                        </h1></center>
+                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                <tbody>
+                     <colgroup>
+                            <col width="40%"/>
+                             <col width="20%"/>
+                            <col width="40%"/>
+                    </colgroup>
+                <tr>                    
+                    <td style="text-align:left">
+                        <t>
+                                <strong style="color:#1f5999;">Date from :</strong>
+                                <span t-esc="data['date_from']"/>
+                            </t>
+                            <br/>
+                            <t>
+                                <strong style="color:#1f5999;">Date to :</strong>
+                                <span t-esc="data['date_to']"/>
+                            </t>
+
+                        
+                         <p t-if="data['target_move'] == 'all'"><strong style="color:#1f5999;">Target Moves:</strong>All Entries</p>
+                         <p t-if="data['target_move'] == 'posted'"><strong style="color:#1f5999;">Target Moves:</strong> All Posted Entries</p>
+                          
+                    </td>
+                   
+                   <td style=" position: absolute; right: 10px; text-align: left;">
+                        
+                    </td>
+                </tr>
+                </tbody>
+                <br/><br/>
+            </table> 
+                 <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                     <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                            <tr align="left">
+                                <th style="color:#1f5999;">Sale</th>
+                                <th style="color:#1f5999;">Net</th>
+                                <th style="color:#1f5999;">Tax</th>
+                            </tr>
+                        </thead>
+                        <tr align="left" t-foreach="lines['sale']" t-as="line">
+                            <td>
+                                <span t-esc="line.get('name')"/>
+                            </td>
+                            <td>
+                                <span t-att-style="style" t-esc="'{:,.2f}'.format(line.get('net', 0))"/>
+                                     
+                            </td>
+                            <td>
+                                <span t-att-style="style" t-esc="'{:,.2f}'.format(line.get('tax', 0))"
+                                     />
+                            </td>
+                        </tr>
+                        <br/>
+                        <tr align="left">
+                            <td><p></p></td>
+                            <td><p></p></td>
+                            <td><p></p></td>
+                        </tr>
+                        <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                        <tr align="left">
+                                <th style="color:#1f5999;">Purchase</th>
+                                <th style="color:#1f5999;">Net</th>
+                                <th style="color:#1f5999;">Tax</th>
+                            
+                        </tr>
+                        </thead>
+                        <tr align="left" t-foreach="lines['purchase']" t-as="line">
+                            <td>
+                                <span t-esc="line.get('name')"/>
+                            </td>
+                            <td>
+                                <span t-att-style="style" t-esc="'{:,.2f}'.format(line.get('net', 0))"
+                                     />
+                            </td>
+                            <td>
+                                <span t-att-style="style" t-esc="'{:,.2f}'.format(line.get('tax', 0))"
+                                      />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                </div>
+            </t>
+    </template>
+
+</odoo>

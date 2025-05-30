@@ -1,0 +1,49 @@
+<odoo>
+<record id="view_sale_order_inherit_rental_I" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherit.rental.I</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <field name="si_locked" invisible="0"/>
+                    <button string="Lock" name="set_locked" type="object"
+                            class="btn-primary"
+                            invisible="si_locked == True"
+                            groups="lock.group_lock"/>
+                    <button string="Unlock" name="set_locked" type="object"
+                            class="btn-secondary"
+                            invisible="si_locked == False"
+                            groups="lock.group_lock"/>
+                </header>
+            </xpath>
+
+
+            <!-- <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='next_invoice_date']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='plan_id']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="readonly">si_locked == True</attribute>
+            </xpath> -->
+        </field>
+    </record>
+    </odoo>

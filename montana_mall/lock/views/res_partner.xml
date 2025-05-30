@@ -1,0 +1,26 @@
+<odoo>
+<record id="res_partner_form_locked" model="ir.ui.view">
+    <field name="name">res.partner.form.locked</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//sheet" position="before">
+            <header>
+                    <field name="locked" invisible="1" />
+                    
+                    <button string="Lock" name="set_locked" type="object"
+                            class="btn-primary"
+                            invisible="locked"
+                            groups="lock.group_lock" />
+                    <button string="Unlock" name="set_locked" type="object"
+                            class="btn-secondary"
+                            invisible="not locked"
+                            groups="lock.group_lock" />
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">locked</attribute>
+            </xpath>
+    </field>
+</record>
+</odoo>

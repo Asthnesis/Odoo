@@ -1,0 +1,14 @@
+<odoo>
+    <record id="view_si_meters_tree" model="ir.ui.view">
+        <field name="name">si.meters.tree</field>
+        <field name="model">si.meters</field>
+        <field name="arch" type="xml">
+            <tree string="Meters" editable="bottom">
+                <field name="si_meter_number"/>
+                <field name="si_status" />
+                <field name="date_added"/>
+                <field name="allocated_unit_id" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

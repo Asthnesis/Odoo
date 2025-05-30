@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_partnerledger">
+        <t t-call="web.html_container">
+                <t t-set="data_report_margin_top" t-value="12"/>
+                <t t-set="data_report_header_spacing" t-value="9"/>
+                <t t-set="data_report_dpi" t-value="110"/>
+                <div class="page">
+                  <div style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;">
+                   
+                     <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                    <tbody>
+                        <colgroup>
+                                <col width="40%"/>
+                                <col width="20%"/>
+                                <col width="40%"/>
+                        </colgroup>
+                        <tr>
+                        
+                        <td style="text-align:left">
+                            <strong><t t-esc="res_company.name"/><br/></strong> 
+                            <t t-esc="res_company.street"/><br/>
+                            <t t-esc="res_company.street2"/>, <t t-esc="res_company.city"/><br/>
+                            <t t-esc="res_company.phone"/><br/>  
+                            <t t-esc="res_company.email"/><br/>
+                            <t t-esc="res_company.website"/><br/></td>
+                    
+                    <td/>
+                    
+                    <td><img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/></td></tr>
+                    </tbody>
+                </table>
+                 <br/>
+                 <center><h1 style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace; color:#1f5999;">
+                               <span>Partner Ledger</span>
+                        </h1></center>
+                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                <tbody>
+                     <colgroup>
+                            <col width="40%"/>
+                             <col width="20%"/>
+                            <col width="40%"/>
+                    </colgroup>
+                <tr>                    
+                    <td style="text-align:left">
+                    <t t-if="data['form']['date_from']">
+                                <strong style="color:#1f5999;">Date from :</strong>
+                                <span t-esc="data['form']['date_from']"/>
+                                <br/>
+                         </t>
+
+                         <t t-if="data['form']['date_to']">
+                                <strong style="color:#1f5999;">Date to :</strong>
+                                <span t-esc="data['form']['date_to']"/>
+                            </t>                          
+                    </td>
+                   
+                   <td style=" position: absolute; right: 10px; text-align: left;">
+                        
+                    </td>
+                </tr>
+                </tbody>
+                <br/><br/>
+            </table> 
+                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                     <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                            <tr>
+                                <th style="color:#1f5999;">Date</th>
+                                <th style="color:#1f5999;">Journal</th>
+				<th style="color:#1f5999;">Account</th>
+                                <th style="color:#1f5999;">Reference</th>
+                                <th style="color:#1f5999;">Debit</th>
+                                <th style="color:#1f5999;">Credit</th>
+                                <th style="color:#1f5999;">Balance</th>
+                                <th t-if="data['form']['amount_currency']">Currency</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="docs" t-as="o">
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">
+                                        <t t-if="o.name">                                      
+                                        <strong style="color:#1f5999;" t-esc="o.name"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-end">
+                                        <strong style="color:#1f5999;" t-esc="'{:,.2f}'.format(sum_partner(data, o, 'debit')) if sum_partner(data, o, 'debit') else '0.00'" />
+                                    </td>
+                                    <td class="text-end">
+                                        <strong style="color:#1f5999;" t-esc="'{:,.2f}'.format(sum_partner(data, o, 'credit')) if sum_partner(data, o, 'credit') else '0.00'" />
+                                    </td>
+                                    <td class="text-end">
+                                        <strong style="color:#1f5999;"     t-esc="'{:,.2f}'.format(sum_partner(data, o, 'debit') - sum_partner(data, o, 'credit')) if sum_partner(data, o, 'debit') and sum_partner(data, o, 'credit') else '0.00'" />
+                                    </td>
+                                </tr>
+                                <tr t-foreach="lines(data, o)" t-as="line">
+                                    <td>
+                                        <span t-esc="line['date']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line['code']"/>
+                                    </td>
+				     <td>
+                                       
+                                    </td>
+                                    <td>
+                                        <span t-esc="(line['displayed_name'][:35] + '...') if len(line['displayed_name']) > 35 else line['displayed_name']"/>
+
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['debit']) if line['debit'] else '-'" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['credit']) if line['credit'] else '-'" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['progress']) if line['progress'] else '-'" />
+                                    </td>
+                                    <td class="text-end" t-if="data['form']['amount_currency']">
+                                        <t t-if="line['currency_id']">
+                                            <span t-esc="'{:,.2f}'.format(line['amount_currency']) if line['amount_currency'] else '-'" />
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </t>
+                    </table>                  </div>
+                </div>
+           
+        </t>
+    </template>
+
+</odoo>

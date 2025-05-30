@@ -1,0 +1,18 @@
+<odoo>
+    <record id="view_sale_order_inherit_rental" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherit.rental</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="industry_real_estate.rental_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Other Info">
+                    <group>
+                        <field name="lease_picked"/>
+                        <field name="steel_door"/>
+                        <field name="shutter_door"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

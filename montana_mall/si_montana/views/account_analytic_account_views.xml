@@ -1,0 +1,16 @@
+<odoo>
+    <record id="custom_account_analytic_account_form_view" model="ir.ui.view">
+        <field name="name">account.analytic.account.form.view</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="industry_real_estate.property_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_property_building']" position="after">
+                <field name="si_location" string="Location"/>
+            </xpath>
+            <xpath expr="//field[@name='x_rental_contract_id']" position="before">
+                <field name="si_customer" string="Tenant"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

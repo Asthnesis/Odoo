@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_journal">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+            <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                    <div style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;">
+                   
+                     <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                    <tbody>
+                        <colgroup>
+                                <col width="40%"/>
+                                <col width="20%"/>
+                                <col width="40%"/>
+                        </colgroup>
+                        <tr>
+                        
+                        <td style="text-align:left">
+                            <strong><t t-esc="res_company.name"/><br/></strong> 
+                            <t t-esc="res_company.street"/><br/>
+                            <t t-esc="res_company.street2"/>, <t t-esc="res_company.city"/><br/>
+                            <t t-esc="res_company.phone"/><br/>  
+                            <t t-esc="res_company.email"/><br/>
+                            <t t-esc="res_company.website"/><br/></td>
+                    
+                    <td/>
+                    
+                    <td><img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/></td></tr>
+                    </tbody>
+                </table>
+                 <br/>
+                 <center><h1 style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace; color:#1f5999;">
+                               <span><t t-esc="o.name"/> Journal</span>
+                        </h1></center>
+                    <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                <tbody>
+                     <colgroup>
+                            <col width="40%"/>
+                             <col width="20%"/>
+                            <col width="40%"/>
+                    </colgroup>
+                <tr>                    
+                    <td style="text-align:left">
+                     <div class="col-3">
+                                <strong style="color:#1f5999;">Journal:</strong><span t-esc="o.name"/>                                
+                            </div>
+                            <div class="col-3">
+                                
+                                <p t-if="data['form'].get('sort_selection') != 'l.date'"><strong style="color:#1f5999;">Entries Sorted By:</strong> Journal Entry Number</p>
+                                <p t-if="data['form'].get('sort_selection') == 'l.date'"><strong style="color:#1f5999;">Entries Sorted By:</strong> Date</p>
+                            </div>
+                        <t>
+                                <strong style="color:#1f5999;">Date from: </strong> <span t-esc="data['form']['date_from']"/>
+                                
+                            </t>
+                            <br/>
+                            <t>
+                                <strong style="color:#1f5999;">Date To: </strong><span t-esc="data['form']['date_to']"/>
+                                 
+                            </t>
+                        
+                         <p t-if="data['form']['target_move'] == 'all'"><strong style="color:#1f5999;">Target Moves:</strong>All Entries</p>
+                         <p t-if="data['form']['target_move'] == 'posted'"><strong style="color:#1f5999;">Target Moves:</strong> All Posted Entries</p>
+                         
+                    </td>
+                   
+                   <td style=" position: absolute; right: 10px; text-align: left;">
+                        
+                    </td>
+                </tr>
+                </tbody>
+                <br/><br/>
+            </table>
+                       
+
+                       <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                         <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                             <tr>
+                                    <th style="color:#1f5999;">Move</th>
+                                    <th style="color:#1f5999;">Date</th>
+                                    <th style="color:#1f5999;">Account</th>
+                                    <th style="color:#1f5999;">Partner</th>
+                                    <th style="color:#1f5999;">Label</th>
+                                    <th style="color:#1f5999;">Debit</th>
+                                    <th style="color:#1f5999;">Credit</th>
+                                    <th t-if="data['form']['amount_currency']">Currency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lines[o.id]" t-as="aml">
+                                    <td><span t-esc="aml.move_id.name != '/' and aml.move_id.name or ('*'+str(aml.move_id.id))"/></td>
+                                    <td><span t-field="aml.date"/></td>
+                                    <td><span t-field="aml.account_id.code"/></td>
+                                    <td><span t-esc="aml.sudo().partner_id and aml.sudo().partner_id.name and (aml.sudo().partner_id.name[:23] + '...' if len(aml.sudo().partner_id.name) > 23 else aml.sudo().partner_id.name) or ''"/></td>
+                                    <td><span t-esc="aml.name and isinstance(aml.name, str) and (aml.name[:20] + '...' if len(aml.name) > 20 else aml.name) or ''"/></td>
+                                    <td><span t-esc="'{:,.2f}'.format(aml.debit)" /></td>
+                                    <td><span t-esc="'{:,.2f}'.format(aml.credit)" /></td>
+                                    <td t-if="data['form']['amount_currency'] and aml.amount_currency">
+                                        <span t-esc="'{:,.2f}'.format(aml.amount_currency)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-4 pull-right">
+                                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                                    <tr>
+                                        <td><strong style="color:#1f5999;">Total</strong></td>
+                                        <td><span t-esc="'{:,.2f}'.format(sum_debit(data, o))" /></td>
+                                        <td><span t-esc="'{:,.2f}'.format(sum_credit(data, o))" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                                    <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                             
+                                        <tr><th style="color:#1f5999;" colspan="3">Tax Declaration</th></tr>
+                                        <tr>
+                                            <th style="color:#1f5999;">Name</th>
+                                            <th style="color:#1f5999;">Base Amount</th>
+                                            <th style="color:#1f5999;">Tax Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="taxes" t-value="get_taxes(data, o)"/>
+                                        <tr t-foreach="taxes" t-as="tax">
+                                            <td><span t-esc="tax.name"/></td>
+                                            <td><span t-esc="'{:,.2f}'.format(taxes[tax]['base_amount'])" /></td>
+                                            <td><span t-esc="'{:,.2f}'.format(taxes[tax]['tax_amount'])" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="page-break-after: always;"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

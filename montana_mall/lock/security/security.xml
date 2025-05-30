@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record id="lock.group_lock" model="res.groups">
+            <field name="name">Lock</field>
+            <!-- <field name="category_id" ref="base.module_category_technical"/> -->
+            <field name="category_id" ref="base.module_category_administration"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_partner_lock,access.res.partner.lock,model_res_partner,lock.group_lock,1,1,1,1
+access_product_template_lock,access.product.template.lock,model_product_template,lock.group_lock,1,1,1,1
+access_sale_order_lock,access.sale.order.lock,model_sale_order,lock.group_lock,1,1,1,1

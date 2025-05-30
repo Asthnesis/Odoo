@@ -1,0 +1,18 @@
+<odoo>
+    <record id="res_partner_form_locked" model="ir.ui.view">
+        <field name="name">account.analytic.account.form.locked</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="industry_real_estate.property_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="locked" invisible="1" />
+                <button string="Lock" name="toggle_locked" type="object"
+                        class="btn-primary"
+                        invisible="locked == True" />
+                <button string="Unlock" name="toggle_locked" type="object"
+                        class="btn-secondary"
+                        invisible="locked == False" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_general_ledger">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="12"/>
+            <t t-set="data_report_header_spacing" t-value="9"/>
+            <t t-set="data_report_dpi" t-value="110"/>
+                <div class="page">
+                <div style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;">
+                   
+                     <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                    <tbody>
+                        <colgroup>
+                                <col width="40%"/>
+                                <col width="20%"/>
+                                <col width="40%"/>
+                        </colgroup>
+                        <tr>
+                        
+                        <td style="text-align:left">
+                            <strong><t t-esc="res_company.name"/><br/></strong> 
+                            <t t-esc="res_company.street"/><br/>
+                            <t t-esc="res_company.street2"/>, <t t-esc="res_company.city"/><br/>
+                            <t t-esc="res_company.phone"/><br/>  
+                            <t t-esc="res_company.email"/><br/>
+                            <t t-esc="res_company.website"/><br/></td>
+                    
+                    <td/>
+                    
+                    <td><img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/></td></tr>
+                    </tbody>
+                </table>
+                 <br/>
+                 <center><h1 style="font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace; color:#1f5999;">
+                               <span t-esc="res_company.name"/>: General ledger
+                        </h1></center>
+                <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                <tbody>
+                     <colgroup>
+                            <col width="40%"/>
+                             <col width="20%"/>
+                            <col width="40%"/>
+                    </colgroup>
+                <tr>                    
+                    <td style="text-align:left">
+                    <div class="row mt32">
+                        <div class="col-4">
+                            <strong style="color:#1f5999;">Journals:</strong>
+                              <p t-esc="', '.join([ lt or '' for lt in print_journal ])"/>
+                        </div>
+                    </div>
+                        <t groups="analytic.group_analytic_accounting">
+                            <t t-if="analytic_account_ids">
+                                <div class="col-4">
+                                    <strong style="color:#1f5999;">Analytic Accounts:</strong>
+                                      <p t-esc="', '.join([aa.name or '' for aa in analytic_account_ids ])"/>
+                                </div>
+                            </t>
+                        </t>
+                         <t>
+                                <strong style="color:#1f5999;">Date from :</strong>
+                                <span t-esc="data['date_from']"/>
+                        </t>
+                        <t>
+                                <strong style="color:#1f5999;">Date to :</strong>
+                                <span t-esc="data['date_to']"/>
+                        </t>
+                            <p>
+                                <span t-if="data['display_account'] == 'all'"><strong style="color:#1f5999;">Display Account: </strong>All accounts</span>
+                                <span t-if="data['display_account'] == 'movement'"><strong style="color:#1f5999;">Display Account: </strong>With movements</span>
+                                <span t-if="data['display_account'] == 'not_zero'"><strong style="color:#1f5999;">Display Account: </strong>With balance not equal to zero</span>
+                            </p>
+
+                            <div class="col-4">                            
+                            <p t-if="data['sortby'] == 'sort_date'"><strong style="color:#1f5999;">Sorted By:</strong> Date</p>
+                            <p t-if="data['sortby'] == 'sort_journal_partner'"><strong style="color:#1f5999;">Sorted By:</strong> Journal and Partner</p>
+                        </div>
+                        
+                         <p t-if="data['target_move'] == 'all'"><strong style="color:#1f5999;">Target Moves:</strong>All Entries</p>
+                         <p t-if="data['target_move'] == 'posted'"><strong style="color:#1f5999;">Target Moves:</strong> All Posted Entries</p>
+                           <!-- <span>
+                           <strong style="color:#1f5999;">TO</strong><br/>
+                          <t t-if="docs.partner_ids.name"> <t t-esc="docs.partner_ids.name"/><br/></t>
+                           <t t-if="docs.partner_ids.street"><t t-esc="docs.partner_ids.street"/><br/></t>
+                           <t t-if="docs.partner_ids.street2"><t t-esc="docs.partner_ids.street2"/></t> <t t-if="docs.partner_ids.city"> <t t-esc="docs.partner_id.city"/><br/></t>
+                           <t t-if="docs.partner_ids.phone"><strong style="color:#1f5999;">Phone:</strong><t t-esc="docs.partner_ids.phone"/><br/></t>
+                           <t t-if="docs.partner_ids.mobile"><strong style="color:#1f5999;">Mobile:</strong> <t t-esc="docs.partner_ids.mobile"/><br/></t>
+                           <t t-if="docs.partner_ids.vat"><strong style="color:#1f5999;">KRA PIN:</strong><t t-esc="docs.partner_ids.vat"/><br/></t>
+                           
+                       </span> -->
+                    </td>
+                   
+                   <td style=" position: absolute; right: 10px; text-align: left;">
+                        
+                    </td>
+                </tr>
+                </tbody>
+                <br/><br/>
+            </table> 
+
+
+                     <table style="width:100%; font-size:18px; font-family: 'Fira Code', 'Source Code Pro', Consolas, 'Courier New', monospace;" class="table table-sm o_main_table table-borderless mt-4">
+                         <thead style="background-color: #deeaf6;font-weight:bold; display: table-header-group;">
+                            <tr class="text-center">
+                                <th style="color:#1f5999;">Date</th>
+                                <th style="color:#1f5999;">Journal</th>
+                                <th style="color:#1f5999;">Partner</th>
+                                <th style="color:#1f5999;">Ref</th>
+                                <th style="color:#1f5999;">Move</th>
+                                <t groups="analytic.group_analytic_accounting">
+                                    <th style="color:#1f5999;">Analytic Account</th>
+                                </t>
+                                <th style="color:#1f5999;">Entry Label</th>
+                                <th style="color:#1f5999;">Debit</th>
+                                <th style="color:#1f5999;">Credit</th>
+                                <th style="color:#1f5999;">Balance</th>
+                                <th style="color:#1f5999;" groups="base.group_multi_currency">Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="Accounts" t-as="account">
+                                <tr style="font-weight: bold;">
+                                    <td colspan="6">
+                                        <span style="color: white;" t-esc="'..'"/>
+                                        <span t-esc="account['code']"/>
+                                        <span t-esc="account['name'][:15] + '...' if len(account['name']) > 15 else account['name']" />
+                                    </td>
+                                    <t groups="analytic.group_analytic_accounting">
+                                        <td></td>
+                                    </t>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(account.get('debit', 0.0))" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(account.get('credit', 0.0))" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(account.get('balance', 0.0))" />
+                                    </td>
+                                    <td groups="base.group_multi_currency"/>
+                                </tr>
+                                <tr t-foreach="account['move_lines']" t-as="line">
+                                    <td><span t-esc="line['ldate']"/></td>
+                                    <td><span t-esc="line['lcode']"/></td>
+                                    <td><span t-esc="line['partner_name']" /></td>
+                                    <td><span t-if="line['lref']" t-esc="line['lref'][:15] + '...' if len(line['lref']) > 15 else line['lref']" /></td>
+                                    <td><span t-esc="line['move_name'][:20] + '...' if len(line['move_name']) > 20 else line['move_name']" /></td>
+                                    <t groups="analytic.group_analytic_accounting">
+                                        <td><span t-esc="line['analytic_account_id']"/></td>
+                                    </t>
+                                    <td><span t-esc="line['lname']" /></td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['debit'])" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['credit'])" />
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line['balance'])" />
+                                    </td>
+                                    <td class="text-end" groups="base.group_multi_currency">
+                                        <span t-esc="'{:,.2f}'.format(line['amount_currency']) if line['amount_currency'] and line['amount_currency'] > 0.00 else ''" />
+                                        <span t-esc="line['currency_code'] if line['amount_currency'] and line['amount_currency'] > 0.00 else ''" />
+                                        </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_sale_order_inherit_rent_unit" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherit.unit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field
+                    name="si_unit_customer_link" 
+                    string="Unit"
+                    context="{'form_view_ref': 'industry_real_estate.property_form_view'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
