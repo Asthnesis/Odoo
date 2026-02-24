@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <!-- 'Update Quantity'on product.template -->
+
+        <record id="product_template_button_onhand_qty_inherit" model="ir.ui.view">
+            <field name="name">view.onhand.qty.button.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_update_quantity_on_hand']" position="replace">
+                    <button string="Update Quantity" type="object" groups="ibos_update_qty_disable.group_onhand_qty_user"
+                            name="action_update_quantity_on_hand"/>
+                </xpath>
+            </field>
+        </record>
+
+    <!-- Print Labels -->
+
+        <record id="product_template_form_view_print_label_inherit" model="ir.ui.view">
+            <field name="name">product.template.print.label.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_open_label_layout']" position="replace">
+                    <button string="Print Labels" type="object" name="action_open_label_layout"
+                            groups="ibos_update_qty_disable.group_onhand_qty_user" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Update Quantity on product.product -->
+
+        <record id="product_product_form_button_onhand_qty_inherit" model="ir.ui.view">
+            <field name="name">product.product.onhand.qty.button.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_update_quantity_on_hand']" position="replace">
+                    <button string="Update Quantity" type="object"
+                            name="action_update_quantity_on_hand"/>
+                </xpath>
+                 <button name="action_update_quantity_on_hand" position="attributes">
+                    <attribute name="groups">ibos_update_qty_disable.group_onhand_qty_user</attribute>
+                </button>
+            </field>
+        </record>
+
+        <!-- Physical inventory update quantity -->
+
+        <record id="view_stock_quant_form_inherit" model="ir.ui.view">
+            <field name="name">stock.quant.form.inherit</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+            <field name="arch" type="xml">
+                <button name="action_apply_all" position="attributes">
+                    <attribute name="groups">ibos_update_qty_disable.group_onhand_qty_user</attribute>
+                </button>
+            </field>
+        </record>
+
+        <!-- Replenish Button -->
+
+        <record id="view_product_template_form_inherit_hide_buttons" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.hide.buttons</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                    <attribute name="groups">ibos_update_qty_disable.group_onhand_qty_user</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_product_product_form_inherit_hide_buttons" model="ir.ui.view">
+            <field name="name">product.product.form.inherit.hide.buttons</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                    <attribute name="groups">ibos_update_qty_disable.group_onhand_qty_user</attribute>
+                </xpath>
+            </field>
+        </record>
+
+            <!-- Print Labels Button - Can't really update quantity but handy-->
+
+        <record id="product_template_tree_view_print_label_inherit" model="ir.ui.view">
+            <field name="name">product.template.tree.print.label.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_open_label_layout']" position="replace">
+                    <button string="Print Labels" type="object" name="action_open_label_layout"
+                            groups="ibos_update_qty_disable.group_onhand_qty_user"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_product_tree_view_print_label_inherit" model="ir.ui.view">
+            <field name="name">product.product.tree.print.label.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_open_label_layout']" position="replace">
+                    <button string="Print Labels" type="object" name="action_open_label_layout"
+                            groups="ibos_update_qty_disable.group_onhand_qty_user"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--  Hide the entire Physical Inventory  -->
+        
+        <record model="ir.ui.menu" id="stock.menu_action_inventory_tree">
+            <field name="groups_id" eval="[(4, ref('ibos_update_qty_disable.group_onhand_qty_user'))]"/>
+        </record>
+
+    </data>
+</odoo>
